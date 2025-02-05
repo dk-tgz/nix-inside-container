@@ -3,9 +3,14 @@ to install nix on alpine (arm + x86):
 RUN apk --no-cache add --update shadow curl nix && \
     echo "filter-syscalls = false" >> /etc/nix/nix.conf && nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs && \
     nix-channel --update && chown --recursive "vault" /nix && \
-    echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' > /etc/profile.d/nixpkgs.sh # && \
+    echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' > /etc/profile.d/nixpkgs.sh && \
     chmod +x /etc/profile.d/nixpkgs.sh
+
+ENV ENV="/etc/profile" ### TO ensure that profile scripts will be loaded 
+
+
 
 
 user should have sh as login shell:
-usermod -s /bin/sh <username>
+usermod -s "/bin/sh -l " <username>
+
